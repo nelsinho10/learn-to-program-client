@@ -1,14 +1,10 @@
 import { createStore } from 'vuex'
+import drawflowModule from '../modules/drawflow/store/drawflow'
 
-export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+const store = createStore({
+    modules: {
+        drawflowModule,
+    },
 })
+
+export default store
