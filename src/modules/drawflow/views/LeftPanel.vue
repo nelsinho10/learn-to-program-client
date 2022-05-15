@@ -1,51 +1,74 @@
 <template>
-    <!-- <small>Operaciones matematicas</small> -->
-
-    <div class="card m-3">
-        <ul class="list-group list-group-flush">
-            <li
-                class="list-group-item"
-                draggable="true"
-                @dragstart="drag($event)"
-            >
-                Asignacion
-            </li>
-        </ul>
-    </div>
-
-    <!-- <small>Operaciones matematicas</small> -->
-    <div class="card m-3">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item" draggable="true">Sumar</li>
-            <li class="list-group-item" draggable="true">Restar</li>
-            <li class="list-group-item" draggable="true">Multiplicacion</li>
-            <li class="list-group-item" draggable="true">Division</li>
-        </ul>
-    </div>
-    <!-- <small>Estructuras de control</small> -->
-    <div class="card m-3">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item" draggable="true">Desicion</li>
-            <li class="list-group-item" draggable="true">Repeticion</li>
-        </ul>
+    <div class="m-3">
+        <p class="text-center fst-italic fw-bolder">Variables</p>
+        <div class="card m-3">
+            <ul class="list-group list-group-flush">
+                <Node
+                    v-for="node in variables"
+                    :key="node.dataNode"
+                    :nameNode="node.nameNode"
+                    :dataNode="node.dataNode"
+                    color="list-group-item-primary"
+                />
+            </ul>
+        </div>
+        <p class="text-center fst-italic fw-bolder">Funciones</p>
+        <div class="card m-3">
+            <ul class="list-group list-group-flush">
+                <Node
+                    v-for="node in funcs"
+                    :key="node.dataNode"
+                    :nameNode="node.nameNode"
+                    :dataNode="node.dataNode"
+                    color="list-group-item-success"
+                />
+            </ul>
+        </div>
+        <p class="text-center fst-italic fw-bolder">Operaciones Matematicas</p>
+        <div class="card m-3">
+            <ul class="list-group list-group-flush">
+                <Node
+                    v-for="node in operations"
+                    :key="node.dataNode"
+                    :nameNode="node.nameNode"
+                    :dataNode="node.dataNode"
+                    color="list-group-item-warning"
+                />
+            </ul>
+        </div>
+        <p class="text-center fst-italic fw-bolder">Esructuras de control</p>
+        <div class="card m-3">
+            <ul class="list-group list-group-flush">
+                <Node
+                    v-for="node in controlStructured"
+                    :key="node.dataNode"
+                    :nameNode="node.nameNode"
+                    :dataNode="node.dataNode"
+                    color="list-group-item-info"
+                />
+            </ul>
+        </div>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import * as node from '../helpers/templates'
 export default {
     name: 'LeftPanel',
-    computed: {
-        ...mapGetters('drawflowModule', ['myEditor']),
+    components: {
+        Node: defineAsyncComponent(() =>
+            import('../components/NodeComponent.vue')
+        ),
     },
-    mounted(){
-        console.log(this.myEditor);
-    },
-    methods: {
-        drag(event){
-            console.log(event);
+    data() {
+        return {
+            variables: node.variablesNodes,
+            funcs: node.funcsNodes,
+            operations: node.operationsNodes,
+            controlStructured: node.controlStructuresNodes,
         }
-    }
+    },
 }
 </script>
 

@@ -1,5 +1,6 @@
 <template>
     <Navbar />
+    <Sidebar />
     <router-view></router-view>
 </template>
 
@@ -10,10 +11,11 @@ export default {
     name: 'App',
     components: {
         Navbar: defineAsyncComponent(() =>
-            import('../src/modules/shared/components/NavbarComponent.vue')
+            import('@/modules/shared/components/NavbarComponent.vue')
+        ),
+        Sidebar: defineAsyncComponent(() =>
+            import('@/modules/shared/components/SidebarComponent.vue')
         ),
     },
 }
 </script>
-
-<style></style>
