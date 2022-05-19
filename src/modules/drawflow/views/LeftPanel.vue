@@ -1,10 +1,10 @@
 <template>
     <div class="m-3">
-        <p class="text-center fst-italic fw-bolder">Variables</p>
+        <p class="text-center fst-italic fw-bolder">Tipos de Datos</p>
         <div class="card m-3">
             <ul class="list-group list-group-flush">
                 <Node
-                    v-for="node in variables"
+                    v-for="node in dataType"
                     :key="node.dataNode"
                     :nameNode="node.nameNode"
                     :dataNode="node.dataNode"
@@ -63,7 +63,7 @@ export default {
     },
     data() {
         return {
-            variables: node.variablesNodes,
+            dataType: node.dataType,
             funcs: node.funcsNodes,
             operations: node.operationsNodes,
             controlStructured: node.controlStructuresNodes,

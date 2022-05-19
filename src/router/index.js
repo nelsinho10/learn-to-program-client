@@ -1,15 +1,20 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import drawflowRouter from '@/modules/drawflow/router'
+import programRouter from '@/modules/program/router';
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
+        name: 'home',
         component: () => import('@/modules/home/layout/HomeLayout.vue'),
     },
     {
         path: '/drawflow',
         ...drawflowRouter,
+    },
+    {
+        path: '/programs',
+        ...programRouter,
     },
 ]
 

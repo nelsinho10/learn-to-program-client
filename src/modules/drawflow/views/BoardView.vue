@@ -33,6 +33,53 @@ export default {
         const editor = new Drawflow(id)
         this.$store.commit('drawflowModule/setEditor', editor)
         editor.start()
+
+        editor.on('connectionCreated', ({ output_id, input_id }) => {
+            // console.log(output_id, input_id, output_class, input_class)
+
+            // Obtener los nodos
+            const nodeOutput = editor.getNodeFromId(output_id)
+            const nodeInput = editor.getNodeFromId(input_id)
+
+            if (nodeInput.name == 'assign') {
+                editor.updateNodeDataFromId(input_id, {
+                    name: String(nodeInput.data.name),
+                    val: nodeOutput.data.val,
+                })
+            }
+            if (nodeInput.name == 'add') {
+                console.log('viendo el input', nodeInput.data.name)
+
+                let salida = nodeOutput.data.name
+                // Saber si existe el name para determinar si es numero o variable
+                if (salida) {
+                    if (nodeInput.data.name) {
+                        salida = `${nodeInput.data.name} + ${salida}`
+                    }
+                }
+
+                if (!salida) {
+                    if (nodeInput.data.name) {
+                        salida = `${nodeInput.data.name} + ${nodeOutput.data.val}`
+                    } else {
+                        salida = `${nodeOutput.data.val}`
+                    }
+                }
+
+                let val = nodeInput.data.val
+                val = val + Number(nodeOutput.data.val)
+                editor.updateNodeDataFromId(input_id, {
+                    val,
+                    name: salida,
+                })
+
+                console.log(salida)
+            }
+        })
+
+        // editor.on('nodeDataChanged', (id) => {
+        //     console.log('Node data changed ' + id)
+        // })
     },
     computed: {
         ...mapGetters('drawflowModule', ['getEditor', 'codeViewer']),
@@ -50,7 +97,13 @@ export default {
             this.$store.commit('drawflowModule/setCodeViewer')
         },
         save() {
-            console.log(this.getEditor.export())
+            const nodes = this.getEditor.export().drawflow.Home
+            // for (let i in nodes) {
+            //     for (let j in nodes[i]) {
+            //         console.log(nodes[i][j])
+            //     }
+            // }
+            console.log(nodes)
         },
     },
 }
@@ -59,7 +112,7 @@ export default {
 <style lang="scss" scoped>
 #drawflow {
     height: 800px;
-    // border: 1px solid gray;
+    // border: 1px solid gray;<i class="fa-solid fa-bars"></i>
 }
 
 .content {

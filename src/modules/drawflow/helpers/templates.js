@@ -1,25 +1,34 @@
 export const variableS = `
         <div>
             <p class="text-light">Cadena</p>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <input type="text" class="form-control" df-val>
         </div>
         `
 export const variableN = `
         <div>
             <p class="text-light">Numero</p>
-            <input type="number" class="form-control">
+            <input type="number" class="form-control" df-val>
+        </div>
+        `
+export const variableB = `
+        <div>
+            <p class="text-light">Booleano</p>
+            <select class="form-select" df-val>
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
         </div>
         `
 export const assign = `
         <div>
             <p class="text-light">Asignar</p>
-            <input type="number" class="form-control">
+            <input type="text" class="form-control" df-name>
         </div>
         `
 export const add = `
         <div>
             <p class="text-">Suma</p>
-            <input type="number" class="form-control">
+            <input type="number" class="form-control" df-val>
         </div>
         `
 export const subtract = `
@@ -49,7 +58,9 @@ export const print = `
 export const ifT = `
         <div>
             <p class="text-">Desicion</p>
-            <input type="text" class="form-control">
+            <select class="form-select" df-data>
+                <option value="">mayor que ">"</option>
+            </select>
         </div>
         `
 export const forT = `
@@ -59,9 +70,10 @@ export const forT = `
         </div>
         `
 
-export const variablesNodes = [
-    { nameNode: 'Numerica', dataNode: 'number' },
+export const dataType = [
+    { nameNode: 'Numerico', dataNode: 'number' },
     { nameNode: 'Cadena', dataNode: 'string' },
+    { nameNode: 'Booleano', dataNode: 'bool' },
 ]
 
 export const operationsNodes = [
@@ -80,3 +92,5 @@ export const funcsNodes = [
     { nameNode: 'Asignacion', dataNode: 'assign' },
     { nameNode: 'Impresion', dataNode: 'print' },
 ]
+
+

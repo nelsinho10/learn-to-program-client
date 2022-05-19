@@ -6,21 +6,12 @@
         </div>
 
         <h5>Crear nuevo programa</h5>
-        <div class="mb-3">
-            <div
-                class="row row-cols-1 row-cols-md-6"
-                @click="$router.push('/drawflow')"
-            >
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">
-                                This is a longer card with supporting text below
-                                as a natural lead-in to additional content. This
-                                content is a little bit longer.
-                            </p>
-                        </div>
+
+        <div class="row row-cols-1 row-cols-md-6 g-4">
+            <div class="col">
+                <div @click="$router.push('/drawflow')" class="card card-menu">
+                    <div class="card-body align-self-center">
+                        <h1><i class="fa-solid fa-plus"></i></h1>
                     </div>
                 </div>
             </div>
@@ -33,9 +24,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">
-                            This is a longer card with supporting text below as
-                            a natural lead-in to additional content. This
-                            content is a little bit longer.
+                            
                         </p>
                     </div>
                 </div>
@@ -102,6 +91,9 @@ export default {
 
     &:hover {
         background-color: lighten($color: grey, $amount: 45);
+    }
+    .card-menu{
+       height: 200px !important;
     }
 }
 </style>
