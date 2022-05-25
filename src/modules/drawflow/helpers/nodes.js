@@ -4,52 +4,65 @@ import * as temp from './templates'
 export const createNode = (name, posX, posY) => {
     const editor = store.getters['drawflowModule/getEditor']
 
+    if (name == 'assign') {
+        editor.addNode(
+            'assign',
+            1,
+            1,
+            posX,
+            posY,
+            'bg-success',
+            { name: '', value: null, code: '', blockId: null, isTrue: null },
+            temp.assign
+        )
+    }
+
     if (name == 'number') {
         editor.addNode(
             'number',
-            0,
+            1,
             1,
             posX,
             posY,
             'bg-primary',
-            { name:'', val: 0 },
+            { name: '', value: 0, blockId: null, isTrue: null },
             temp.variableN
         )
     }
     if (name == 'string') {
         editor.addNode(
             'string',
-            0,
+            1,
             1,
             posX,
             posY,
             'bg-primary',
-            { val: '' },
+            { name: 'string', value: '', blockId: null, isTrue: null },
             temp.variableS
         )
     }
     if (name == 'bool') {
         editor.addNode(
             'bool',
-            0,
+            1,
             1,
             posX,
             posY,
             'bg-primary',
-            { val: false },
+            { name: '', value: 'False', blockId: null, isTrue: null },
             temp.variableB
         )
     }
-    if (name == 'add') {
+    if (name == 'sum') {
         editor.addNode(
-            'add',
+            'sum',
             2,
             1,
             posX,
             posY,
             'bg-warning',
-            { name: '', val: 0 },
-            temp.add
+            { name: '', value: 0, code: '', blockId: null, isTrue: null },
+            temp.sum
         )
     }
     if (name == 'subtract') {
@@ -60,7 +73,7 @@ export const createNode = (name, posX, posY) => {
             posX,
             posY,
             'bg-warning',
-            { data: 0 },
+            { data: 0, blockId: null, isTrue: null },
             temp.subtract
         )
     }
@@ -72,7 +85,7 @@ export const createNode = (name, posX, posY) => {
             posX,
             posY,
             'bg-warning',
-            { data: 0 },
+            { data: 0, blockId: null, isTrue: null },
             temp.multiply
         )
     }
@@ -84,12 +97,27 @@ export const createNode = (name, posX, posY) => {
             posX,
             posY,
             'bg-warning',
-            { data: 0 },
+            { data: 0, blockId: null, isTrue: null },
             temp.divide
         )
     }
     if (name == 'if') {
-        editor.addNode('if', 2, 2, posX, posY, 'bg-info', { data: 0 }, temp.ifT)
+        editor.addNode(
+            'if',
+            2,
+            2,
+            posX,
+            posY,
+            'bg-info',
+            {
+                operator: '',
+                val1: null,
+                val2: null,
+                code: '',
+                blockId: null,
+            },
+            temp.ifT
+        )
     }
     if (name == 'for') {
         editor.addNode(
@@ -99,22 +127,17 @@ export const createNode = (name, posX, posY) => {
             posX,
             posY,
             'bg-info',
-            { data: 0 },
+            {
+                val1: 0,
+                val2: 0,
+                blockId: null,
+                isTrue: null,
+                code: '',
+            },
             temp.forT
         )
     }
-    if (name == 'assign') {
-        editor.addNode(
-            'assign',
-            1,
-            1,
-            posX,
-            posY,
-            'bg-success',
-            { name: '', val: ''},
-            temp.assign
-        )
-    }
+
     if (name == 'print') {
         editor.addNode(
             'print',
@@ -123,8 +146,33 @@ export const createNode = (name, posX, posY) => {
             posX,
             posY,
             'bg-success',
-            { data: 0 },
+            { data: '', blockId: null, code: '', isTrue: null },
             temp.print
+        )
+    }
+
+    if (name == 'block') {
+        editor.addNode(
+            'block',
+            0,
+            1,
+            posX,
+            posY,
+            'bg-secondary',
+            { code: '', comment: '', blockId: null },
+            temp.block
+        )
+    }
+    if (name == 'blockS') {
+        editor.addNode(
+            'blockS',
+            1,
+            1,
+            posX,
+            posY,
+            'bg-secondary',
+            { code: '', comment: '', isTrue: null, blockId: null },
+            temp.block
         )
     }
 }

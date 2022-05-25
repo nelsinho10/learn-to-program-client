@@ -1,78 +1,39 @@
 <template>
     <div class="container">
-        <div class="my-3">
-            <h1>Hola Nelson!!!</h1>
-            <h2>Listo para programar</h2>
-        </div>
+        <header class="py-4">
+            <h1>Hola Nelson !!</h1>
+            <h2>Estas listo para aprender a programar</h2>
+        </header>
 
-        <h5>Crear nuevo programa</h5>
-
-        <div class="row row-cols-1 row-cols-md-6 g-4">
-            <div class="col">
-                <div @click="$router.push('/drawflow')" class="card card-menu">
+        <main class="">
+            <p class="h5"><i>Nuevo Programa</i></p>
+            <section class="">
+                <div
+                    @click="$router.push('/drawflow/new')"
+                    class="card card-menu"
+                >
                     <div class="card-body align-self-center">
                         <h1><i class="fa-solid fa-plus"></i></h1>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <h5>Programas recientes</h5>
-        <div class="row row-cols-1 row-cols-md-6 g-4">
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            
-                        </p>
+            <p class="h5 my-3"><i>Programas Recientes</i></p>
+            <section class="d-flex">
+                <div
+                    v-for="i in 5"
+                    :key="i"
+                    @click="$router.push('/drawflow/new')"
+                    class="card card-menu m-2"
+                >
+                    <div class="card-body align-self-center">
+                        <p></p>
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a short card.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as
-                            a natural lead-in to additional content.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as
-                            a natural lead-in to additional content. This
-                            content is a little bit longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as
-                            a natural lead-in to additional content. This
-                            content is a little bit longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </section>
+        </main>
+
+        <footer></footer>
     </div>
 </template>
 
@@ -92,8 +53,10 @@ export default {
     &:hover {
         background-color: lighten($color: grey, $amount: 45);
     }
-    .card-menu{
-       height: 200px !important;
-    }
+}
+.card-menu {
+    height: 150px !important;
+    width: 150px !important;
+    display: flex;
 }
 </style>

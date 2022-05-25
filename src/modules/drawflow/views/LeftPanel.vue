@@ -1,5 +1,17 @@
 <template>
     <div class="m-3">
+        <p class="text-center fst-italic fw-bolder">Bloques de Codigo</p>
+        <div class="card m-3">
+            <ul class="list-group list-group-flush">
+                <Node
+                    v-for="node in codeBlocks"
+                    :key="node.dataNode"
+                    :nameNode="node.nameNode"
+                    :dataNode="node.dataNode"
+                    color="list-group-item-secondary"
+                />
+            </ul>
+        </div>
         <p class="text-center fst-italic fw-bolder">Tipos de Datos</p>
         <div class="card m-3">
             <ul class="list-group list-group-flush">
@@ -53,7 +65,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import * as node from '../helpers/templates'
+import * as node from '../helpers/nodesData'
 export default {
     name: 'LeftPanel',
     components: {
@@ -67,6 +79,7 @@ export default {
             funcs: node.funcsNodes,
             operations: node.operationsNodes,
             controlStructured: node.controlStructuresNodes,
+            codeBlocks: node.codeblocks
         }
     },
 }

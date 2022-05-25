@@ -1,6 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import drawflowRouter from '@/modules/drawflow/router'
-import programRouter from '@/modules/program/router';
 
 const routes = [
     {
@@ -9,12 +7,25 @@ const routes = [
         component: () => import('@/modules/home/layout/HomeLayout.vue'),
     },
     {
-        path: '/drawflow',
-        ...drawflowRouter,
+        path: '/drawflow/:id',
+        name: 'drawflow',
+        component: () => import('@/modules/drawflow/layout/DrawflowLayout.vue'),
+        props: (route) => {
+            const { id } = route.params
+            return {
+                uid: id,
+            }
+        },
     },
     {
         path: '/programs',
-        ...programRouter,
+        name: 'program',
+        component: () => import('@/modules/program/layout/ProgramsLayout.vue'),
+    },
+    {
+        path: '/auth',
+        name: 'auth',
+        component: () => import('@/modules/auth/layout/authLayout.vue'),
     },
 ]
 

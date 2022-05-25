@@ -51,7 +51,7 @@ export default {
     methods: {
         editProgram(uid) {
             console.log('edit', uid)
-            this.$router.push({ name: 'drawflow', params: { uid } })
+            this.$router.push({ name: 'drawflow', params: { id: uid } })
         },
         deleteProgram(uid) {
             console.log(`delete ${uid}`)

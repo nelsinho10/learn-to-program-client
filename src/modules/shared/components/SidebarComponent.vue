@@ -6,7 +6,7 @@
         aria-labelledby="offcanvasExampleLabel"
     >
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Titulo</h5>
+            <!-- <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5> -->
             <button
                 type="button"
                 class="btn-close text-reset"
@@ -16,27 +16,33 @@
         </div>
         <div class="offcanvas-body">
             <div class="list-group list-group-flush">
-                <button
-                    type="button"
-                    class="list-group-item list-group-item-action"
-                    aria-current="true"
-                >
-                    <router-link :to="{ name: 'home' }">Inicio</router-link>
-                </button>
-                <button
-                    type="button"
-                    class="list-group-item list-group-item-action"
-                >
-                    <router-link :to="{ name: 'drawflow' }"
-                        >Nuevo programa</router-link
+                <router-link :to="{ name: 'home' }">
+                    <button
+                        type="button"
+                        class="list-group-item list-group-item-action"
+                        aria-current="true"
                     >
-                </button>
-                <button
-                    type="button"
-                    class="list-group-item list-group-item-action"
-                >
-                    <router-link :to="{ name: 'program' }">Listar</router-link>
-                </button>
+                        Inicio
+                    </button>
+                </router-link>
+
+                <router-link :to="{ name: 'drawflow', params: { id: 'new' } }">
+                    <button
+                        type="button"
+                        class="list-group-item list-group-item-action"
+                    >
+                        Nuevo programa
+                    </button>
+                </router-link>
+
+                <router-link :to="{ name: 'program' }">
+                    <button
+                        type="button"
+                        class="list-group-item list-group-item-action"
+                    >
+                        Listar
+                    </button>
+                </router-link>
             </div>
         </div>
     </div>

@@ -1,21 +1,27 @@
+export const block = `
+        <div>
+            <p class="text-light">Bloque</p>
+            <input type="text" class="form-control" df-comment>
+        </div>
+        `
 export const variableS = `
         <div>
             <p class="text-light">Cadena</p>
-            <input type="text" class="form-control" df-val>
+            <input type="text" class="form-control" df-comment>
         </div>
         `
 export const variableN = `
         <div>
             <p class="text-light">Numero</p>
-            <input type="number" class="form-control" df-val>
+            <input type="number" class="form-control" df-value>
         </div>
         `
 export const variableB = `
         <div>
             <p class="text-light">Booleano</p>
-            <select class="form-select" df-val>
-                <option value="true">True</option>
-                <option value="false">False</option>
+            <select class="form-select" df-value>
+                <option value="True">Verdadero</option>
+                <option value="False">Falso</option>
             </select>
         </div>
         `
@@ -25,72 +31,57 @@ export const assign = `
             <input type="text" class="form-control" df-name>
         </div>
         `
-export const add = `
+export const sum = `
         <div>
             <p class="text-">Suma</p>
-            <input type="number" class="form-control" df-val>
+            <input type="number" class="form-control" df-value readonly>
         </div>
         `
 export const subtract = `
         <div>
             <p class="text-">Resta</p>
-            <input type="number" class="form-control">
+            <input type="number" class="form-control" df-value readonly> 
         </div>
         `
 export const multiply = `
         <div>
             <p class="text-">Multiplicacion</p>
-            <input type="number" class="form-control">
+            <input type="number" class="form-control" df-value readonly>
         </div>
         `
 export const divide = `
         <div>
             <p class="text-">Divsion</p>
-            <input type="number" class="form-control">
+            <input type="number" class="form-control" df-value readonly>
         </div>
         `
 export const print = `
         <div>
             <p class="text-light">Impresion</p>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" df-data>
         </div>
         `
 export const ifT = `
         <div>
             <p class="text-">Desicion</p>
-            <select class="form-select" df-data>
-                <option value="">mayor que ">"</option>
+            <small>Operador</small>
+            <select class="form-select mb-3" style="text-align:center;" df-operator>
+            <option value=">"> > </option>
+            <option value="<"> < </option>
+            <option value="=="> == </option>
+                <option value=">="> >= </option>
+                <option value="<="> <= </option>
             </select>
+            <small>Condicion</small>
+            <input type="text" class="form-control" df-condition style="text-align:center;" readonly>
         </div>
         `
 export const forT = `
         <div>
             <p class="text-">Repeticion</p>
-            <input type="text" class="form-control">
+            <small>Desde</small>
+            <input type="number" class="form-control" df-val1>
+            <small>Hasta</small>
+            <input type="number" class="form-control" df-val2>
         </div>
         `
-
-export const dataType = [
-    { nameNode: 'Numerico', dataNode: 'number' },
-    { nameNode: 'Cadena', dataNode: 'string' },
-    { nameNode: 'Booleano', dataNode: 'bool' },
-]
-
-export const operationsNodes = [
-    { nameNode: 'Suma', dataNode: 'add' },
-    { nameNode: 'Resta', dataNode: 'subtract' },
-    { nameNode: 'Multiplicacion', dataNode: 'multiply' },
-    { nameNode: 'Division', dataNode: 'divide' },
-]
-
-export const controlStructuresNodes = [
-    { nameNode: 'Desicion', dataNode: 'if' },
-    { nameNode: 'Repeticion', dataNode: 'for' },
-]
-
-export const funcsNodes = [
-    { nameNode: 'Asignacion', dataNode: 'assign' },
-    { nameNode: 'Impresion', dataNode: 'print' },
-]
-
-
