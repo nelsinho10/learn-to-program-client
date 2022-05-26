@@ -22,10 +22,13 @@
 
 <script>
 import { createNode } from '../helpers/nodes'
-import { events } from '../helpers/events/'
+import { events } from '../helpers/events'
 import { mapGetters } from 'vuex'
-import 'drawflow/dist/drawflow.min.css'
+import { generateCode } from '../helpers/generateCode'
 import Drawflow from 'drawflow'
+import Swal from 'sweetalert2'
+import api from '@/api'
+import 'drawflow/dist/drawflow.min.css'
 
 export default {
     name: 'BoardView',
@@ -52,206 +55,51 @@ export default {
             ev.preventDefault()
         },
         changeViewCode() {
+            const data = this.getEditor.export().drawflow.Home.data
+            const nodes = []
+            // generateCode(nodes)
+            for (let id of Object.keys(data)) {
+                nodes.push({
+                    id,
+                    ...data[id],
+                })
+            }
+            const code = generateCode(nodes)
             this.$store.commit('drawflowModule/setCodeViewer')
+            this.$store.commit('drawflowModule/setProgramCode', code)
         },
         save() {
-            let blocks = []
-            let blocksS = []
-            let codeProgram = ''
-            const nodes = this.getEditor.export().drawflow.Home
-            for (let i in nodes) {
-                for (let j in nodes[i]) {
-                    if (nodes[i][j].name === 'block') {
-                        let nodeComment = {
-                            id: nodes[i][j].id,
-                            comment: nodes[i][j].data.code,
-                        }
-                        blocks.push(nodeComment)
-                    }
-                    if (nodes[i][j].name === 'blockS') {
-                        let nodeComment = {
-                            id: nodes[i][j].data.blockId,
-                            comment: nodes[i][j].data.code,
-                            isTrue: nodes[i][j].data.isTrue,
-                        }
-                        blocksS.push(nodeComment)
-                    }
-                }
-            }
-
-            blocks.forEach(({ id, comment }) => {
-                codeProgram = codeProgram.concat('\n\n', comment)
-
-                for (let i in nodes) {
-                    for (let j in nodes[i]) {
-                        if (id === nodes[i][j].data.blockId) {
-                            if (nodes[i][j].name == 'assign') {
-                                codeProgram = codeProgram.concat(
-                                    '\n',
-                                    nodes[i][j].data.code
-                                )
-                            }
-                            if (nodes[i][j].name == 'print') {
-                                codeProgram = codeProgram.concat(
-                                    '\n',
-                                    nodes[i][j].data.code
-                                )
-                            }
-                            if (nodes[i][j].name == 'for') {
-                                codeProgram = codeProgram.concat(
-                                    '\n',
-                                    nodes[i][j].data.code
-                                )
-
-                                blocksS.forEach(({ id, comment }) => {
-
-                                    if (nodes[i][j].id === id) {
-                                        codeProgram = codeProgram.concat(
-                                            '\n\t',
-                                            comment
-                                        )
-
-                                        for (let i in nodes) {
-                                            for (let j in nodes[i]) {
-                                                if (
-                                                    nodes[i][j].data.blockId ===
-                                                    id
-                                                ) {
-                                                    if (
-                                                        nodes[i][j].name ==
-                                                        'assign'
-                                                    ) {
-                                                        codeProgram =
-                                                            codeProgram.concat(
-                                                                '\n\t',
-                                                                nodes[i][j].data
-                                                                    .code
-                                                            )
-                                                    }
-                                                    if (
-                                                        nodes[i][j].name ==
-                                                        'print'
-                                                    ) {
-                                                        codeProgram =
-                                                            codeProgram.concat(
-                                                                '\n\t',
-                                                                nodes[i][j].data
-                                                                    .code
-                                                            )
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })
-                            }
-
-                            if (nodes[i][j].name == 'if') {
-                                codeProgram = codeProgram.concat(
-                                    '\n',
-                                    nodes[i][j].data.code
-                                )
-
-                                blocksS.forEach(({ comment, isTrue, id }) => {
-                                    if (isTrue && nodes[i][j].id === id) {
-                                        codeProgram = codeProgram.concat(
-                                            '\n\t',
-                                            comment
-                                        )
-
-                                        for (let i in nodes) {
-                                            for (let j in nodes[i]) {
-                                                if (
-                                                    nodes[i][j].data.blockId ===
-                                                        id &&
-                                                    nodes[i][j].data.isTrue ===
-                                                        true
-                                                ) {
-                                                    if (
-                                                        nodes[i][j].name ==
-                                                        'assign'
-                                                    ) {
-                                                        codeProgram =
-                                                            codeProgram.concat(
-                                                                '\n\t',
-                                                                nodes[i][j].data
-                                                                    .code
-                                                            )
-                                                    }
-                                                    if (
-                                                        nodes[i][j].name ==
-                                                        'print'
-                                                    ) {
-                                                        console.log(
-                                                            'viendo si entra al mero print'
-                                                        )
-                                                        codeProgram =
-                                                            codeProgram.concat(
-                                                                '\n\t',
-                                                                nodes[i][j].data
-                                                                    .code
-                                                            )
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })
-
-                                codeProgram = codeProgram.concat('\n', 'else:')
-
-                                blocksS.forEach(({ comment, isTrue, id }) => {
-                                    if (!isTrue && nodes[i][j].id === id) {
-                                        codeProgram = codeProgram.concat(
-                                            '\n\t',
-                                            comment
-                                        )
-
-                                        for (let i in nodes) {
-                                            for (let j in nodes[i]) {
-                                                if (
-                                                    nodes[i][j].data.blockId ===
-                                                        id &&
-                                                    nodes[i][j].data.isTrue ===
-                                                        false
-                                                ) {
-                                                    if (
-                                                        nodes[i][j].name ==
-                                                        'assign'
-                                                    ) {
-                                                        codeProgram =
-                                                            codeProgram.concat(
-                                                                '\n\t',
-                                                                nodes[i][j].data
-                                                                    .code
-                                                            )
-                                                    }
-                                                    if (
-                                                        nodes[i][j].name ==
-                                                        'print'
-                                                    ) {
-                                                        codeProgram =
-                                                            codeProgram.concat(
-                                                                '\n\t',
-                                                                nodes[i][j].data
-                                                                    .code
-                                                            )
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }
+            Swal.fire({
+                title: 'Ingrese el nombre del programa',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off',
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                showLoaderOnConfirm: true,
+                preConfirm: (name) => {
+                    return this.saveProgram(name)
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((result) => {
+                if (result) {
+                    Swal.fire(
+                        'Programa guardado!',
+                        'Su programa se guardo exitosamente!',
+                        'success'
+                    ).then(() => {})
                 }
             })
-
-            console.log(this.getEditor.export().drawflow.Home)
-            console.log(codeProgram)
-            console.log(blocks)
-            console.log(blocksS)
+        },
+        async saveProgram(name) {
+            const program = this.getEditor.export()
+            try {
+                const resp = await api.post(`/programs/${name}`, program)
+                return resp
+            } catch (error) {
+                console.log(error)
+            }
         },
     },
 }

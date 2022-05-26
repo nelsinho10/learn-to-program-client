@@ -1,4 +1,5 @@
 export default () => ({
     editor: null,
-    viewCode: false
+    viewCode: false,
+    programCode: '',
 })

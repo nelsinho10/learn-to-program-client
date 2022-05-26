@@ -22,11 +22,6 @@ const routes = [
         name: 'program',
         component: () => import('@/modules/program/layout/ProgramsLayout.vue'),
     },
-    {
-        path: '/auth',
-        name: 'auth',
-        component: () => import('@/modules/auth/layout/authLayout.vue'),
-    },
 ]
 
 const router = createRouter({

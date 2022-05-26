@@ -1,5 +1,5 @@
 import store from '@/store'
-import { actionHandler } from '../../handlers'
+import { actionHandler } from '../handlers'
 
 /**
  ** Event handler for the editor.
@@ -19,8 +19,14 @@ export const events = () => {
     })
 
     editor.on('nodeDataChanged', (id) => {
-        try {
-            const nodeOutput = editor.getNodeFromId(id)
+        const nodeOutput = editor.getNodeFromId(id)
+
+        if (nodeOutput.name === 'print') {
+            editor.updateNodeDataFromId(id, {
+                ...nodeOutput.data,
+                code: `print('${nodeOutput.data.data}')`,
+            })
+        } else {
             const nodeInputId = nodeOutput.outputs.output_1.connections[0]
 
             if (nodeInputId) {
@@ -28,22 +34,11 @@ export const events = () => {
                 // Call the action handler.
                 actionHandler(nodeInputId.node, nodeOutput, nodeInput, editor)
             }
-        } catch (error) {
-            console.log('')
         }
-
-        // TODO: Actualizacion sencilla
     })
 
     editor.on('connectionRemoved', ({ input_id }) => {
-        // Get the output and input nodes.
-        //const nodeOutput = editor.getNodeFromId(output_id)
-        // const nodeOutputData = nodeOutput.data
-        // const nodeOutputName = nodeOutput.name
-
         const nodeInput = editor.getNodeFromId(input_id)
-        // const nodeInputName = nodeInput.name
-        // const nodeInputData = nodeInput.data
 
         if (nodeInput.name === 'assign') {
             const nodeOutput1 = nodeInput.outputs.output_1.connections[0]

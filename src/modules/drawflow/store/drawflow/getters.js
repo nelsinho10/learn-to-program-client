@@ -5,3 +5,7 @@ export const getEditor = (state) => {
 export const codeViewer = (state) => {
     return state.viewCode
 }
+
+export const getProgramCode = (state) => {
+    return state.programCode
+}

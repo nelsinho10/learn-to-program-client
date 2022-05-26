@@ -1,6 +1,6 @@
 <template>
     <tr>
-        <th scope="row">{{ index + 1 }}</th>
+        <th scope="row">{{ (index + 1) }}</th>
         <td>{{ name }}</td>
         <td>{{ dateCreated }}</td>
         <td>{{ dateUpdated }}</td>
@@ -12,18 +12,19 @@
             >
                 <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <button
+            <!-- <button
                 @click="deleteProgram(uid)"
                 type="button"
                 class="btn btn-danger"
             >
                 <i class="fa-solid fa-trash"></i>
-            </button>
+            </button> -->
         </td>
     </tr>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: 'ProgramComponent',
     props: {
@@ -33,7 +34,6 @@ export default {
         name: {
             type: String,
             required: true,
-            default: 'Nelson',
         },
         dateCreated: {
             type: String,
@@ -46,16 +46,19 @@ export default {
         uid: {
             type: String,
             required: true,
-        },
+        }
     },
     methods: {
-        editProgram(uid) {
-            console.log('edit', uid)
+        async editProgram(uid) {
             this.$router.push({ name: 'drawflow', params: { id: uid } })
+            
         },
         deleteProgram(uid) {
             console.log(`delete ${uid}`)
         },
+    },
+    computed: {
+        ...mapGetters('drawflowModule', ['getEditor']),
     },
 }
 </script>

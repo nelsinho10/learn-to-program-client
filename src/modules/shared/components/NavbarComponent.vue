@@ -1,5 +1,8 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav
+        class="navbar navbar-expand-lg navbar-light"
+        style="background-color: #e3f2fd"
+    >
         <div class="container-fluid">
             <div class="d-flex">
                 <button
@@ -13,13 +16,6 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
-
-            <button
-                class="btn btn-outline-success rounded-circle"
-                type="submit"
-            >
-                <i class="fa-solid fa-user"></i>
-            </button>
         </div>
     </nav>
 </template>

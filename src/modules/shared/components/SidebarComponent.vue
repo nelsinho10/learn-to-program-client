@@ -15,13 +15,15 @@
             ></button>
         </div>
         <div class="offcanvas-body">
-            <div class="list-group list-group-flush">
+            <h4>Menu</h4>
+            <div class="list-group list-group-flush mt-4 mx-3 fs-5">
                 <router-link :to="{ name: 'home' }">
                     <button
                         type="button"
                         class="list-group-item list-group-item-action"
                         aria-current="true"
                     >
+                        <i class="fa-solid fa-house"></i>
                         Inicio
                     </button>
                 </router-link>
@@ -31,7 +33,8 @@
                         type="button"
                         class="list-group-item list-group-item-action"
                     >
-                        Nuevo programa
+                        <i class="fa-solid fa-circle-plus"></i>
+                        Nuevo Programa
                     </button>
                 </router-link>
 
@@ -40,7 +43,8 @@
                         type="button"
                         class="list-group-item list-group-item-action"
                     >
-                        Listar
+                        <i class="fa-solid fa-rectangle-list"></i>
+                        Lista de Programas
                     </button>
                 </router-link>
             </div>
@@ -54,4 +58,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+a {
+    text-decoration: none;
+    border: 1px solid #000;
+    border-radius: 8px;
+    margin: 5px;
+}
+</style>

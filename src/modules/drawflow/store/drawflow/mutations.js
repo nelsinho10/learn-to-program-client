@@ -9,3 +9,8 @@ export const setCodeViewer = (state) => {
         state.viewCode = true
     }
 }
+
+export const setProgramCode = (state, programCode) => {
+    state.programCode = programCode
+}
+

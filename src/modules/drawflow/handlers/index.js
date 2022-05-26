@@ -31,6 +31,13 @@ export const actionHandler = (input_id, nodeOutput, nodeInput, editor) => {
         })
     }
 
+    if (nodeOutput.name === 'blockS') {
+        editor.updateNodeDataFromId(nodeOutput.id, {
+            ...nodeOutputData,
+            code: `# ${nodeOutputData.comment}`,
+        })
+    }
+
     if (nodeInputName === 'print') {
         const blockId =
             nodeOutputData.blockId === null
@@ -63,7 +70,6 @@ export const actionHandler = (input_id, nodeOutput, nodeInput, editor) => {
             const nodeInput2 = editor.getNodeFromId(nodeInput2Id.node)
 
             const condition = `${nodeInput1.data.value} ${nodeInput.data.operator} ${nodeInput2.data.value}`
-            console.log(nodeInput1, nodeInput2, nodeInput)
 
             editor.updateNodeDataFromId(input_id, {
                 ...nodeInputData,
@@ -110,7 +116,6 @@ export const actionHandler = (input_id, nodeOutput, nodeInput, editor) => {
     }
 
     if (nodeOutput.name === 'for') {
-        console.log('si es output', nodeInput, nodeOutput)
         editor.updateNodeDataFromId(input_id, {
             ...nodeInputData,
             isTrue: nodeOutputData.isTrue,

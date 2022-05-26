@@ -23,32 +23,22 @@
                         :dateCreated="program.date_created"
                         :dateUpdated="program.date_updated"
                         :index="index"
+                        :page="page"
                     />
                 </tbody>
             </table>
         </div>
-
-        <nav
-            class="d-flex justify-content-center"
-            aria-label="Page navigation example"
-        >
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+        <div class="d-flex justify-content-center">
+            <Pagination @getPage="getPage" />
+        </div>
     </div>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
+import { paginationRange } from '../helpers/pagination'
+
+import api from '@/api'
 export default {
     name: 'programsLayout',
     data() {
@@ -63,18 +53,22 @@ export default {
         Program: defineAsyncComponent(() =>
             import('../components/ProgramComponent.vue')
         ),
+        Pagination: defineAsyncComponent(() =>
+            import('../components/PaginationComponent.vue')
+        ),
     },
     methods: {
-        async getPrograms() {
+        async getPrograms(initial = 0, final = 10) {
             try {
-                const programs = await fetch(
-                    `http://localhost:3000/api/programs/`
-                ).then((r) => r.json())
-                this.programs = programs.programs
-                console.log(programs)
+                const { data } = await api.get(`/programs/${initial}/${final}`)
+                this.programs = data.programs
             } catch (error) {
-                console.log('Error mi papa')
+                console.log(error)
             }
+        },
+        getPage(data) {
+            const { initial, final } = paginationRange[data]
+            this.getPrograms(initial, final)
         },
     },
 }

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import api from '@/api'
 import { defineAsyncComponent } from 'vue'
 import { mapGetters } from 'vuex'
 export default {
@@ -23,7 +24,7 @@ export default {
         uid: String,
     },
     created() {
-        if (this.uid) {
+        if (this.uid !== 'new') {
             this.getProgram()
         }
     },
@@ -40,14 +41,20 @@ export default {
     methods: {
         async getProgram() {
             try {
-                const program = await fetch(
-                    `http://localhost:3000/api/programs/${this.uid}`
-                ).then((r) => r.json())
-                const programEditor = JSON.parse(program.program[0].program)
-                console.log(programEditor)
-                this.getEditor.import(programEditor)
+                const { program } = await (
+                    await api.get(`programs/${this.uid}`)
+                ).data
+
+                this.getEditor.import(JSON.parse(program[0].program))
             } catch (error) {
-                console.log('Error mi papa')
+                console.log(error)
+            }
+        },
+    },
+    watch: {
+        uid(value) {
+            if (value === 'new') {
+                this.getEditor.clear()
             }
         },
     },

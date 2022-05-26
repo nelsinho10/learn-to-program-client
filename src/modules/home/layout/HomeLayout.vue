@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <header class="py-4">
-            <h1>Hola Nelson !!</h1>
-            <h2>Estas listo para aprender a programar</h2>
+            <h1>Bienvenido!!</h1>
+            <h2>Estás listo para aprender a programar</h2>
         </header>
 
         <main class="">
@@ -13,24 +13,29 @@
                     class="card card-menu"
                 >
                     <div class="card-body align-self-center">
-                        <h1><i class="fa-solid fa-plus"></i></h1>
+                        <h1 class=""><i class="fa-solid fa-plus mt-4"></i></h1>
                     </div>
                 </div>
             </section>
 
-            <p class="h5 my-3"><i>Programas Recientes</i></p>
-            <section class="d-flex">
-                <div
-                    v-for="i in 5"
-                    :key="i"
-                    @click="$router.push('/drawflow/new')"
-                    class="card card-menu m-2"
-                >
-                    <div class="card-body align-self-center">
-                        <p></p>
+            <template v-if="existsPrograms">
+                <p class="h5 mt-5"><i>Algunos de tus Programas</i></p>
+                <section class="d-flex">
+                    <div
+                        v-for="program in programs"
+                        :key="program.uid"
+                        @click="$router.push(`/drawflow/${program.uid}`)"
+                        class="card card-programs-recent m-2"
+                    >
+                        <div class="card-body align-self-center text-center">
+                            <small><i>Nombre:</i></small>
+                            <p>{{ program.name }}</p>
+                            <small><i>Fecha:</i></small>
+                            <p>{{ program.date_created }}</p>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </template>
         </main>
 
         <footer></footer>
@@ -38,9 +43,33 @@
 </template>
 
 <script>
+import api from '@/api'
 export default {
     name: 'HomeLayout',
-    methods: {},
+    data() {
+        return {
+            programs: [],
+        }
+    },
+    created() {
+        this.recentPrograms()
+    },
+    methods: {
+        async recentPrograms() {
+            try {
+                const { data } = await api.get('/programs/0/3')
+                this.programs = data.programs
+                console.log(data.programs)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+    },
+    computed: {
+        existsPrograms() {
+            return this.programs.length != 0 ? true : false
+        },
+    },
 }
 </script>
 
@@ -55,8 +84,14 @@ export default {
     }
 }
 .card-menu {
-    height: 150px !important;
-    width: 150px !important;
+    height: 150px;
+    width: 150px;
     display: flex;
+}
+
+.card-programs-recent {
+    height: 180px;
+    width: 190px;
+    font-size: large;
 }
 </style>

@@ -1,3 +1,3 @@
-export const myAction = async ({ commit }, editor) => {
-    commit.setEditor(editor)
-}
+// export const myAction = async ({ commit }, editor) => {
+//     commit.setEditor(editor)
+// }
