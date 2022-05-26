@@ -1,14 +1,13 @@
 import { createStore } from 'vuex'
 
-export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+import drawflowModule from '../modules/drawflow/store/drawflow'
+import sharedModule from '../modules/shared/store/shared'
+
+const store = createStore({
+    modules: {
+        drawflowModule,
+        sharedModule,
+    },
 })
+
+export default store
