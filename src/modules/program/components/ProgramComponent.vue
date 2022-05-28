@@ -1,6 +1,6 @@
 <template>
     <tr>
-        <th scope="row">{{ (index + 1) }}</th>
+        <th scope="row">{{ index + getPage  }}</th>
         <td>{{ name }}</td>
         <td>{{ dateCreated }}</td>
         <td>{{ dateUpdated }}</td>
@@ -58,7 +58,7 @@ export default {
         },
     },
     computed: {
-        ...mapGetters('drawflowModule', ['getEditor']),
+        ...mapGetters('drawflowModule', ['getEditor', 'getPage']),
     },
 }
 </script>

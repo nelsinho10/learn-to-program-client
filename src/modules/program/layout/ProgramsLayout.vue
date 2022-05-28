@@ -22,8 +22,7 @@
                         :name="program.name"
                         :dateCreated="program.date_created"
                         :dateUpdated="program.date_updated"
-                        :index="index"
-                        :page="page"
+                        :index="index + 1"
                     />
                 </tbody>
             </table>
@@ -36,7 +35,6 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { paginationRange } from '../helpers/pagination'
 
 import api from '@/api'
 export default {
@@ -49,6 +47,9 @@ export default {
     created() {
         this.getPrograms()
     },
+    unmounted(){
+         this.$store.commit('drawflowModule/setPage', 0)
+    },
     components: {
         Program: defineAsyncComponent(() =>
             import('../components/ProgramComponent.vue')
@@ -58,17 +59,16 @@ export default {
         ),
     },
     methods: {
-        async getPrograms(initial = 0, final = 10) {
+        async getPrograms(offset = 0, first = 10) {
             try {
-                const { data } = await api.get(`/programs/${initial}/${final}`)
+                const { data } = await api.get(`/programs/${offset}/${first}`)
                 this.programs = data.programs
             } catch (error) {
                 console.log(error)
             }
         },
-        getPage(data) {
-            const { initial, final } = paginationRange[data]
-            this.getPrograms(initial, final)
+        getPage(page) {
+            this.getPrograms(page * 10)
         },
     },
 }

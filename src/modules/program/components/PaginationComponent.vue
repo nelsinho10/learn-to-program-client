@@ -1,11 +1,12 @@
 <template>
     <nav aria-label="Page navigation" class="">
-        <ul class="pagination bg">
+        <ul class="pagination">
             <li
                 @click="setPage(page)"
                 v-for="(page, index) in numberPages"
                 :key="index"
                 class="page-item"
+                :class="{ active: page === isActive }"
             >
                 <a class="page-link">{{ page }}</a>
             </li>
@@ -23,6 +24,7 @@ export default {
     data() {
         return {
             pages: null,
+            isActive: 1,
         }
     },
     methods: {
@@ -35,19 +37,26 @@ export default {
             }
         },
         setPage(newPage) {
-            this.$emit('getPage', newPage)
+            this.$emit('getPage', newPage - 1)
+            this.$store.commit('drawflowModule/setPage', (newPage - 1) * 10)
+            this.isActive = newPage
         },
     },
     computed: {
         numberPages() {
-            return this.pages / 10 < 1 ? 1 : Math.round(this.pages / 10)
+            return Math.trunc(this.pages / 10) + 1
         },
     },
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .page-link {
     color: #000;
 }
+
+.pagination:hover {
+    cursor: pointer;
+}
 </style>
+>

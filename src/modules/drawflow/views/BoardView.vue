@@ -1,17 +1,5 @@
 <template>
     <div class="content m-3">
-        <div class="d-flex justify-content-end m-3">
-            <button
-                @click="changeViewCode"
-                type="button"
-                class="btn btn-primary btn-sm mx-2"
-            >
-                {{ codeViewer ? 'Cerrar visor de codigo' : 'Ver codigo' }}
-            </button>
-            <button type="button" class="btn btn-success btn-sm" @click="save">
-                Guardar
-            </button>
-        </div>
         <div
             id="drawflow"
             @drop="drop($event)"
@@ -24,10 +12,7 @@
 import { createNode } from '../helpers/nodes'
 import { events } from '../helpers/events'
 import { mapGetters } from 'vuex'
-import { generateCode } from '../helpers/generateCode'
 import Drawflow from 'drawflow'
-import Swal from 'sweetalert2'
-import api from '@/api'
 import 'drawflow/dist/drawflow.min.css'
 
 export default {
@@ -53,53 +38,6 @@ export default {
         },
         allowDrop(ev) {
             ev.preventDefault()
-        },
-        changeViewCode() {
-            const data = this.getEditor.export().drawflow.Home.data
-            const nodes = []
-            // generateCode(nodes)
-            for (let id of Object.keys(data)) {
-                nodes.push({
-                    id,
-                    ...data[id],
-                })
-            }
-            const code = generateCode(nodes)
-            this.$store.commit('drawflowModule/setCodeViewer')
-            this.$store.commit('drawflowModule/setProgramCode', code)
-        },
-        save() {
-            Swal.fire({
-                title: 'Ingrese el nombre del programa',
-                input: 'text',
-                inputAttributes: {
-                    autocapitalize: 'off',
-                },
-                showCancelButton: true,
-                confirmButtonText: 'Guardar',
-                showLoaderOnConfirm: true,
-                preConfirm: (name) => {
-                    return this.saveProgram(name)
-                },
-                allowOutsideClick: () => !Swal.isLoading(),
-            }).then((result) => {
-                if (result) {
-                    Swal.fire(
-                        'Programa guardado!',
-                        'Su programa se guardo exitosamente!',
-                        'success'
-                    ).then(() => {})
-                }
-            })
-        },
-        async saveProgram(name) {
-            const program = this.getEditor.export()
-            try {
-                const resp = await api.post(`/programs/${name}`, program)
-                return resp
-            } catch (error) {
-                console.log(error)
-            }
         },
     },
 }

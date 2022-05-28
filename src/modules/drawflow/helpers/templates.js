@@ -1,13 +1,13 @@
 export const block = `
         <div>
             <p class="text-light">Bloque</p>
-            <input type="text" class="form-control" df-comment>
+            <textarea class="form-control" rows="4" df-comment></textarea>
         </div>
         `
 export const variableS = `
         <div>
             <p class="text-light">Cadena</p>
-            <input type="text" class="form-control" df-comment>
+            <textarea class="form-control" rows="2" df-value></textarea>
         </div>
         `
 export const variableN = `
@@ -58,7 +58,7 @@ export const divide = `
 export const print = `
         <div>
             <p class="text-light">Impresion</p>
-            <input type="text" class="form-control" df-data>
+            <textarea class="form-control" rows="3" df-data></textarea>
         </div>
         `
 export const ifT = `

@@ -1,5 +1,22 @@
 <template>
     <div class="container-fluid">
+        <div class="d-flex justify-content-end pt-2">
+            <button
+                @click="changeViewCode"
+                type="button"
+                class="btn-sm"
+                :class="color"
+            >
+                {{ codeViewer ? 'Cerrar visor de codigo' : 'Ver codigo' }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-success btn-sm mx-3"
+                @click="save"
+            >
+                Guardar
+            </button>
+        </div>
         <div class="row">
             <div class="col-2">
                 <Panel />
@@ -18,8 +35,17 @@
 import api from '@/api'
 import { defineAsyncComponent } from 'vue'
 import { mapGetters } from 'vuex'
+import { generateCode } from '../helpers/generateCode'
+import Swal from 'sweetalert2'
 export default {
     name: 'DrawflowLayout',
+    data() {
+        return {
+            color: 'btn btn-primary',
+            codeViewer: false,
+            saveUid: '',
+        }
+    },
     props: {
         uid: String,
     },
@@ -36,7 +62,7 @@ export default {
         ),
     },
     computed: {
-        ...mapGetters('drawflowModule', ['codeViewer', 'getEditor']),
+        ...mapGetters('drawflowModule', ['getEditor']),
     },
     methods: {
         async getProgram() {
@@ -50,6 +76,71 @@ export default {
                 console.log(error)
             }
         },
+        changeViewCode() {
+            const data = this.getEditor.export().drawflow.Home.data
+            const nodes = []
+
+            for (let id of Object.keys(data)) {
+                nodes.push({
+                    id,
+                    ...data[id],
+                })
+            }
+            const code = generateCode(nodes)
+            this.$store.commit('drawflowModule/setProgramCode', code)
+            this.changeColor()
+        },
+        changeColor() {
+            this.color =
+                this.color === 'btn btn-primary'
+                    ? 'btn btn-danger'
+                    : 'btn btn-primary'
+
+            this.codeViewer = this.codeViewer === true ? false : true
+        },
+        save() {
+            Swal.fire({
+                title: 'Ingrese el nombre del programa',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off',
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                showLoaderOnConfirm: true,
+                cancelButtonText: 'Cancelar',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Por favor ingrese el nombre del programa!'
+                    }
+                },
+                preConfirm: (name) => {
+                    return this.saveProgram(name)
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$router.push({
+                        name: 'drawflow',
+                        params: { id: this.saveUid },
+                    })
+                    Swal.fire(
+                        'Programa guardado!',
+                        'Su programa se guardo exitosamente!',
+                        'success'
+                    )
+                }
+            })
+        },
+        async saveProgram(name) {
+            const program = this.getEditor.export()
+            try {
+                const { data } = await api.post(`/programs/${name}`, program)
+                this.saveUid = data
+            } catch (error) {
+                console.log(error)
+            }
+        },
     },
     watch: {
         uid(value) {
@@ -57,6 +148,9 @@ export default {
                 this.getEditor.clear()
             }
         },
+    },
+    unmounted() {
+        this.saveUid = ''
     },
 }
 </script>
