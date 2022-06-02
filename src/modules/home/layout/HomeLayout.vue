@@ -2,7 +2,7 @@
     <div class="container">
         <header class="py-4">
             <h1>Bienvenido!!</h1>
-            <h2>Estás listo para aprender a programar</h2>
+            <h2>¿Estás listo para aprender a programar?</h2>
         </header>
 
         <main class="">
@@ -19,7 +19,7 @@
             </section>
 
             <template v-if="existsPrograms">
-                <p class="h5 mt-5"><i>Algunos de tus Programas</i></p>
+                <p class="h5 mt-5"><i>Tus creaciones</i></p>
                 <section class="d-flex">
                     <div
                         v-for="program in programs"
@@ -44,6 +44,7 @@
 
 <script>
 import api from '@/api'
+import { programsEndpoint } from '@/api/endpoints'
 export default {
     name: 'HomeLayout',
     data() {
@@ -57,9 +58,8 @@ export default {
     methods: {
         async recentPrograms() {
             try {
-                const { data } = await api.get('/programs/0/3')
+                const { data } = await api.get(`${programsEndpoint}/0/5`)
                 this.programs = data.programs
-                console.log(data.programs)
             } catch (error) {
                 console.log(error)
             }
@@ -76,7 +76,6 @@ export default {
 <style lang="scss" scoped>
 .card {
     cursor: pointer;
-    // border-bottom: 1px solid #2c3e50;
     transition: 0.2s all ease-in;
 
     &:hover {

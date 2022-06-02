@@ -36,7 +36,7 @@ export const createNode = (name, posX, posY) => {
             1,
             posX,
             posY,
-            'bg-primary',
+            'string',
             { name: 'string', value: '', blockId: null, isTrue: null },
             temp.variableS
         )
@@ -48,7 +48,7 @@ export const createNode = (name, posX, posY) => {
             1,
             posX,
             posY,
-            'bg-primary',
+            'bool',
             { name: '', value: 'False', blockId: null, isTrue: null },
             temp.variableB
         )
@@ -72,7 +72,7 @@ export const createNode = (name, posX, posY) => {
             1,
             posX,
             posY,
-            'bg-warning',
+            'subtract',
             { data: 0, blockId: null, isTrue: null },
             temp.subtract
         )
@@ -84,7 +84,7 @@ export const createNode = (name, posX, posY) => {
             1,
             posX,
             posY,
-            'bg-warning',
+            'multiply',
             { data: 0, blockId: null, isTrue: null },
             temp.multiply
         )
@@ -96,7 +96,7 @@ export const createNode = (name, posX, posY) => {
             1,
             posX,
             posY,
-            'bg-warning',
+            'divide',
             { data: 0, blockId: null, isTrue: null },
             temp.divide
         )
@@ -108,11 +108,13 @@ export const createNode = (name, posX, posY) => {
             2,
             posX,
             posY,
-            'bg-info',
+            'bg-info decision',
             {
                 operator: '',
                 val1: null,
+                val1Bool: true,
                 val2: null,
+                val2Bool: false,
                 code: '',
                 blockId: null,
             },
@@ -126,7 +128,7 @@ export const createNode = (name, posX, posY) => {
             1,
             posX,
             posY,
-            'bg-info',
+            'bg-info repetition',
             {
                 val1: 0,
                 val2: 0,
@@ -145,7 +147,7 @@ export const createNode = (name, posX, posY) => {
             0,
             posX,
             posY,
-            'bg-success',
+            'print',
             { data: '', blockId: null, code: '', isTrue: null },
             temp.print
         )
@@ -170,7 +172,7 @@ export const createNode = (name, posX, posY) => {
             1,
             posX,
             posY,
-            'bg-secondary',
+            'block',
             { code: '', comment: '', isTrue: null, blockId: null },
             temp.block
         )

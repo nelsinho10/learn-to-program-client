@@ -1,5 +1,39 @@
-
-
-
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
+.decision {
+    width: 210px !important;
+}
+
+.repetition {
+    background-color: #b2e3ed !important;
+}
+
+.sum {
+    background-color: #ffc107 !important;
+}
+
+.multiply {
+    background-color: #eed077 !important;
+}
+.divide {
+    background-color: #f4da8c !important;
+}
+.subtract {
+    background-color: #f2ca53 !important;
+}
+
+.block {
+    background-color: #9b9fa2 !important;
+}
+
+.string {
+    background-color: #3782f3 !important;
+}
+
+.bool {
+    background-color: #6294df !important;
+}
+
+.print {
+    background-color: #22965e !important;
+}

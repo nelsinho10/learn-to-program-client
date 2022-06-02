@@ -1,12 +1,12 @@
 <template>
     <div
-        class="offcanvas offcanvas-start"
+        class="offcanvas offcanvas-start bg-sidebar"
         tabindex="-1"
         id="offcanvasExample"
         aria-labelledby="offcanvasExampleLabel"
     >
         <div class="offcanvas-header">
-            <!-- <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5> -->
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5>
             <button
                 type="button"
                 class="btn-close text-reset"
@@ -15,7 +15,6 @@
             ></button>
         </div>
         <div class="offcanvas-body">
-            <h4>Menu</h4>
             <div class="list-group list-group-flush mt-4 mx-3 fs-5">
                 <router-link :to="{ name: 'home' }">
                     <button
@@ -61,8 +60,11 @@ export default {
 <style lang="scss" scoped>
 a {
     text-decoration: none;
-    border: 1px solid #000;
+    border: 1px solid #09116594;
     border-radius: 8px;
     margin: 5px;
+}
+.bg-sidebar {
+    background-color: #dce9e9f8;
 }
 </style>

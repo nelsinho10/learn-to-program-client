@@ -1,5 +1,5 @@
 import store from '@/store'
-import { actionHandler } from '../handlers'
+import { actionHandler } from './actions'
 
 /**
  ** Event handler for the editor.
@@ -18,6 +18,7 @@ export const events = () => {
         actionHandler(input_id, nodeOutput, nodeInput, editor)
     })
 
+    //  Data changed event.
     editor.on('nodeDataChanged', (id) => {
         const nodeOutput = editor.getNodeFromId(id)
 
@@ -37,6 +38,7 @@ export const events = () => {
         }
     })
 
+    // Connection deleted event.
     editor.on('connectionRemoved', ({ input_id }) => {
         const nodeInput = editor.getNodeFromId(input_id)
 
