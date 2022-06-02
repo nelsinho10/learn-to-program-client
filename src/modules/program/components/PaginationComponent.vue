@@ -16,10 +16,14 @@
 
 <script>
 import api from '@/api'
+import { programsEndpoint } from '@/api/endpoints'
 export default {
     name: 'PaginationComponent',
     created() {
         this.getNumberPages()
+    },
+    unmounted(){
+        this.pages = null
     },
     data() {
         return {
@@ -30,7 +34,7 @@ export default {
     methods: {
         async getNumberPages() {
             try {
-                const { data } = await api.get(`/programs/count`)
+                const { data } = await api.get(`${programsEndpoint}/count`)
                 this.pages = data.programs_counts[0].count
             } catch (error) {
                 console.log(error)
@@ -44,7 +48,7 @@ export default {
     },
     computed: {
         numberPages() {
-            return Math.trunc(this.pages / 10) + 1
+            return Math.ceil(this.pages / 10)
         },
     },
 }

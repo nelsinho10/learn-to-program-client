@@ -1,3 +1,4 @@
+// Create array of blocks
 const blocks = (nodes) => {
     let blocks = []
     nodes.forEach((node) => {
@@ -11,6 +12,7 @@ const blocks = (nodes) => {
     return blocks
 }
 
+// Create array of blocks struct
 const blocksS = (nodes) => {
     let blocks = []
     nodes.forEach((node) => {
@@ -25,103 +27,100 @@ const blocksS = (nodes) => {
     return blocks
 }
 
+// Generate code for the fors
+const generateForCode = (nodes, idFor) => {
+    const structBlocks = blocksS(nodes)
+    let forCode = ''
+    structBlocks.forEach(({ id, comment }) => {
+        if (idFor === id) {
+            forCode = forCode.concat('   ', comment)
+            nodes.forEach((subNode) => {
+                if (subNode.data.blockId === id) {
+                    if (subNode.name === 'assign' || subNode.name === 'print') {
+                        forCode = forCode.concat('\n   ', subNode.data.code)
+                    }
+                }
+            })
+        }
+    })
+
+    return forCode
+}
+
+// Generate code for the ifs
+const generateIfCode = (nodes, idIf) => {
+    const structBlocks = blocksS(nodes)
+    let ifCode = ''
+    structBlocks.forEach(({ id, comment, isTrue }) => {
+        if (idIf === id && isTrue) {
+            ifCode = ifCode.concat('   ', comment)
+            nodes.forEach((subNode) => {
+                if (
+                    subNode.data.blockId === id &&
+                    subNode.data.isTrue === true
+                ) {
+                    if (subNode.name === 'assign' || subNode.name === 'print') {
+                        ifCode = ifCode.concat('\n   ', subNode.data.code)
+                    }
+                }
+            })
+        }
+    })
+    ifCode = ifCode.concat('\n', 'else:')
+    structBlocks.forEach(({ id, comment, isTrue }) => {
+        if (idIf === id && !isTrue) {
+            ifCode = ifCode.concat('\n   ', comment)
+
+            nodes.forEach((subNode) => {
+                if (
+                    subNode.data.blockId === id &&
+                    subNode.data.isTrue === false
+                ) {
+                    if (subNode.name === 'assign' || subNode.name === 'print') {
+                        ifCode = ifCode.concat('\n   ', subNode.data.code)
+                    }
+                }
+            })
+        }
+    })
+    return ifCode
+}
+
+// Generate code for the blocks
+const blockCode = (nodes, id) => {
+    let code = ''
+
+    nodes.forEach((node) => {
+        if (node.data.blockId === id) {
+            const name = node.name
+
+            if (name === 'assign' || name === 'print') {
+                code = code.concat('\n', node.data.code)
+            }
+            if (name === 'for') {
+                code = code.concat('\n', node.data.code)
+                code = code.concat('\n', generateForCode(nodes, node.id))
+            }
+            if (name === 'if') {
+                code = code.concat('\n', node.data.code)
+                code = code.concat('\n', generateIfCode(nodes, node.id))
+            }
+        }
+    })
+
+    return code
+}
+
+// Generate code from nodes
 export const generateCode = (nodes) => {
     let codeProgram = ''
-    const codeArray = []
-    const structBlocks = blocksS(nodes)
+
     const generalBlocks = blocks(nodes)
 
     generalBlocks.forEach(({ id, comment }) => {
-        codeProgram = codeProgram.concat('\n', comment)
-        nodes.forEach((node) => {
-            // Validate if the node is a block
-            if (node.data.blockId === id) {
-                const name = node.name
-
-                if (name === 'assign' || name === 'print') {
-                    codeProgram = codeProgram.concat('\n', node.data.code)
-                }
-
-                if (name === 'for') {
-                    codeProgram = codeProgram.concat('\n', node.data.code)
-                    structBlocks.forEach(({ id, comment }) => {
-                        if (node.id === id) {
-                            codeProgram = codeProgram.concat('\n   ', comment)
-
-                            nodes.forEach((subNode) => {
-                                if (subNode.data.blockId === id) {
-                                    if (
-                                        subNode.name === 'assign' ||
-                                        subNode.name === 'print'
-                                    ) {
-                                        codeProgram = codeProgram.concat(
-                                            '\n   ',
-                                            subNode.data.code
-                                        )
-                                    }
-                                }
-                            })
-                        }
-                    })
-                }
-
-                if (name === 'if') {
-                    codeProgram = codeProgram.concat('\n', node.data.code)
-                    structBlocks.forEach(({ id, comment, isTrue }) => {
-                        if (node.id === id && isTrue) {
-                            codeProgram = codeProgram.concat('\n   ', comment)
-
-                            nodes.forEach((subNode) => {
-                                if (
-                                    subNode.data.blockId === id &&
-                                    subNode.data.isTrue === true
-                                ) {
-                                    if (
-                                        subNode.name === 'assign' ||
-                                        subNode.name === 'print'
-                                    ) {
-                                        codeProgram = codeProgram.concat(
-                                            '\n   ',
-                                            subNode.data.code
-                                        )
-                                    }
-                                }
-                            })
-                        }
-                    })
-                    codeProgram = codeProgram.concat('\n', 'else:')
-                    structBlocks.forEach(({ id, comment, isTrue }) => {
-                        if (node.id === id && !isTrue) {
-                            codeProgram = codeProgram.concat('\n   ', comment)
-                            codeArray.push('\n   ', comment)
-
-                            nodes.forEach((subNode) => {
-                                if (
-                                    subNode.data.blockId === id &&
-                                    subNode.data.isTrue === false
-                                ) {
-                                    if (
-                                        subNode.name === 'assign' ||
-                                        subNode.name === 'print'
-                                    ) {
-                                        codeProgram = codeProgram.concat(
-                                            '\n   ',
-                                            subNode.data.code
-                                        )
-                                        codeArray.push(
-                                            '\n   ',
-                                            subNode.data.code
-                                        )
-                                    }
-                                }
-                            })
-                        }
-                    })
-                }
-            }
-        })
+        codeProgram = codeProgram.concat('\n\n', comment)
+        codeProgram = codeProgram.concat(blockCode(nodes, id))
     })
 
-    console.log(codeProgram)
     return codeProgram
 }

@@ -65,7 +65,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import * as node from '../helpers/nodesData'
+import * as node from '../helpers/data'
 export default {
     name: 'LeftPanel',
     components: {

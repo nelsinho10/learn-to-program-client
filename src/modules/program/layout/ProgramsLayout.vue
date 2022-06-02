@@ -14,7 +14,7 @@
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="showPrgrams">
                     <Program
                         v-for="(program, index) in programs"
                         :key="program.uid"
@@ -37,18 +37,20 @@
 import { defineAsyncComponent } from 'vue'
 
 import api from '@/api'
+import { programsEndpoint } from '@/api/endpoints'
 export default {
     name: 'programsLayout',
     data() {
         return {
             programs: null,
+            showPrgrams: false,
         }
     },
     created() {
         this.getPrograms()
     },
-    unmounted(){
-         this.$store.commit('drawflowModule/setPage', 0)
+    unmounted() {
+        this.$store.commit('drawflowModule/setPage', 0)
     },
     components: {
         Program: defineAsyncComponent(() =>
@@ -61,8 +63,12 @@ export default {
     methods: {
         async getPrograms(offset = 0, first = 10) {
             try {
-                const { data } = await api.get(`/programs/${offset}/${first}`)
+                this.showPrgrams = false
+                const { data } = await api.get(
+                    `${programsEndpoint}/${offset}/${first}`
+                )
                 this.programs = data.programs
+                this.showPrgrams = true
             } catch (error) {
                 console.log(error)
             }

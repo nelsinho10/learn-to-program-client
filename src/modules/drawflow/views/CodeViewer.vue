@@ -16,14 +16,16 @@
             <div class="mx-3 px-3 viewer">
                 <pre class="code">{{ getProgramCode }}</pre>
             </div>
-            <div class="console mx-3">
+            <div v-if="initExecution" class="console mx-3">
                 <div class="p-auto">
                     <h5><i>Consola</i></h5>
                     <h6 class="">----- Inicio de la ejecucion -----</h6>
                     <div class="execution">
                         <pre class="fs-5">{{ execution }}</pre>
                     </div>
-                    <h6>----- Fin de la ejecucion -----</h6>
+                    <h6 v-if="finalExecution">
+                        ----- Ejecucion realizada con exito -----
+                    </h6>
                 </div>
             </div>
         </div>
@@ -33,8 +35,15 @@
 <script>
 import api from '@/api'
 import { mapGetters } from 'vuex'
+import { programsEndpoint } from '@/api/endpoints'
 export default {
     name: 'codeViewer',
+    props: {
+        uid: {
+            type: String,
+            required: true,
+        },
+    },
     data() {
         return {
             execution: '',
@@ -50,19 +59,17 @@ export default {
             try {
                 this.initExecution = true
                 const { data } = await api.post(
-                    '/programs/hola/execute-program',
+                    `${programsEndpoint}/${this.uid}/execute-program`,
                     this.getProgramCode
                 )
                 this.execution = data
                 this.finalExecution = true
             } catch (error) {
+                this.execution = 'Error de Ejecucion'
                 console.log(error)
             }
         },
     },
-    unmounted(){
-        this.$store.commit('drawflowModule/setCodeViewer')
-    }
 }
 </script>
 
@@ -76,7 +83,7 @@ export default {
 
 .code {
     padding: 0;
-    font-size: x-large;
+    font-size: large;
 }
 
 .console {
@@ -93,6 +100,7 @@ export default {
     height: 550px;
     overflow-x: hidden;
     overflow-y: auto;
+    border-radius: 10px;
 }
 
 .execution {

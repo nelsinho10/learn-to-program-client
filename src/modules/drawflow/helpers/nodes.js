@@ -112,7 +112,9 @@ export const createNode = (name, posX, posY) => {
             {
                 operator: '',
                 val1: null,
+                val1Bool: true,
                 val2: null,
+                val2Bool: false,
                 code: '',
                 blockId: null,
             },

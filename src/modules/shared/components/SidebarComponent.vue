@@ -15,7 +15,6 @@
             ></button>
         </div>
         <div class="offcanvas-body">
-            <!-- <h4>Menu</h4> -->
             <div class="list-group list-group-flush mt-4 mx-3 fs-5">
                 <router-link :to="{ name: 'home' }">
                     <button

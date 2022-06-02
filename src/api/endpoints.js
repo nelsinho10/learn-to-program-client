@@ -1,0 +1,1 @@
+export const programsEndpoint = process.env.VUE_APP_PROGRAMS_ENDPOINT

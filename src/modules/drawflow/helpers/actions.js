@@ -1,86 +1,49 @@
 export const actionHandler = (input_id, nodeOutput, nodeInput, editor) => {
+    const nodeOutputName = nodeOutput.name
     const nodeOutputData = nodeOutput.data
     const nodeInputName = nodeInput.name
     const nodeInputData = nodeInput.data
 
-    if (nodeInputName === 'number') {
-        editor.updateNodeDataFromId(nodeInput.id, {
+    // Outputs
+    if (nodeOutputName === 'block') {
+        editor.updateNodeDataFromId(input_id, {
             ...nodeInputData,
+            blockId: nodeOutput.id,
+        })
+        editor.updateNodeDataFromId(nodeOutput.id, {
+            ...nodeOutputData,
+            code: `# ${nodeOutputData.comment}`,
+            blockId: nodeOutput.id,
+        })
+    }
+
+    if (nodeOutputName === 'blockS') {
+        editor.updateNodeDataFromId(nodeOutput.id, {
+            ...nodeOutputData,
+            code: `# ${nodeOutputData.comment}`,
+        })
+    }
+
+    if (nodeOutputName === 'string') {
+        editor.updateNodeDataFromId(input_id, {
+            name: String(nodeInputData.name),
+            value: nodeOutputData.value,
+            code: `${String(nodeInputData.name)} = '${nodeOutputData.value}'`,
+            blockId: nodeOutputData.blockId,
+            isTrue: nodeOutputData.isTrue,
+        })
+    }
+    if (nodeOutputName === 'bool' || nodeOutputName === 'number') {
+        editor.updateNodeDataFromId(input_id, {
+            name: String(nodeInputData.name),
+            value: nodeOutputData.value,
+            code: `${String(nodeInputData.name)} = ${nodeOutputData.value}`,
             blockId: nodeOutputData.blockId,
             isTrue: nodeOutputData.isTrue,
         })
     }
 
-    if (nodeOutput.name === 'block') {
-        editor.updateNodeDataFromId(input_id, {
-            ...nodeInputData,
-            blockId: nodeOutput.id,
-        })
-        editor.updateNodeDataFromId(nodeOutput.id, {
-            ...nodeOutputData,
-            code: `# ${nodeOutputData.comment}`,
-            blockId: nodeOutput.id,
-        })
-    }
-
-    if (nodeInputName === 'blockS') {
-        editor.updateNodeDataFromId(input_id, {
-            ...nodeInputData,
-            code: `# ${nodeInputData.comment}`,
-            blockId: nodeOutput.id,
-        })
-    }
-
-    if (nodeOutput.name === 'blockS') {
-        editor.updateNodeDataFromId(nodeOutput.id, {
-            ...nodeOutputData,
-            code: `# ${nodeOutputData.comment}`,
-        })
-    }
-
-    if (nodeInputName === 'print') {
-        const blockId =
-            nodeOutputData.blockId === null
-                ? nodeOutput.id
-                : nodeOutputData.blockId
-
-        editor.updateNodeDataFromId(input_id, {
-            ...nodeInputData,
-            code: `print('${nodeInputData.data}')`,
-            blockId,
-            isTrue: nodeOutputData.isTrue,
-        })
-    }
-
-    if (
-        nodeInputName === 'sum' ||
-        nodeInputName === 'subtract' ||
-        nodeInputName === 'multiply' ||
-        nodeInputName === 'divide'
-    ) {
-        mathOperation(editor, nodeInput, nodeInputName)
-    }
-
-    if (nodeInputName === 'if') {
-        const nodeInput1Id = nodeInput.inputs.input_1.connections[0]
-        const nodeInput2Id = nodeInput.inputs.input_2.connections[0]
-
-        if (nodeInput1Id && nodeInput2Id) {
-            const nodeInput1 = editor.getNodeFromId(nodeInput1Id.node)
-            const nodeInput2 = editor.getNodeFromId(nodeInput2Id.node)
-
-            const condition = `${nodeInput1.data.value} ${nodeInput.data.operator} ${nodeInput2.data.value}`
-
-            editor.updateNodeDataFromId(input_id, {
-                ...nodeInputData,
-                condition,
-                code: `if ${condition}:`,
-                blockId: nodeOutput.data.blockId,
-            })
-        }
-    }
-
-    if (nodeOutput.name === 'if') {
+    if (nodeOutputName === 'if') {
         const nodeOutput1Id = nodeOutput.outputs.output_1.connections[0]
         const nodeOutput2Id = nodeOutput.outputs.output_2.connections[0]
 
@@ -101,6 +64,115 @@ export const actionHandler = (input_id, nodeOutput, nodeInput, editor) => {
         }
     }
 
+    if (nodeOutputName === 'for') {
+        editor.updateNodeDataFromId(input_id, {
+            ...nodeInputData,
+            isTrue: nodeOutputData.isTrue,
+            blockId: nodeOutput.id,
+        })
+    }
+
+    if (
+        nodeOutputName === 'sum' ||
+        nodeOutputName === 'subtract' ||
+        nodeOutputName === 'multiply' ||
+        nodeOutputName === 'divide'
+    ) {
+        editor.updateNodeDataFromId(input_id, {
+            name: String(nodeInputData.name),
+            value: nodeOutputData.value,
+            code: `${String(nodeInputData.name)} = ${nodeOutputData.code}`,
+            blockId: nodeOutputData.blockId,
+            isTrue: nodeOutputData.isTrue,
+        })
+    }
+
+    // Inputs
+    if (nodeInputName === 'blockS') {
+        editor.updateNodeDataFromId(input_id, {
+            ...nodeInputData,
+            code: `# ${nodeInputData.comment}`,
+            blockId: nodeOutput.id,
+            isTrue: nodeOutputData.isTrue || false,
+        })
+    }
+
+    if (
+        nodeInputName === 'number' ||
+        nodeInputName === 'bool' ||
+        nodeInputName === 'string'
+    ) {
+        editor.updateNodeDataFromId(nodeInput.id, {
+            ...nodeInputData,
+            isTrue: nodeOutputData.isTrue,
+            blockId:
+                nodeOutputName === 'block'
+                    ? nodeOutput.id
+                    : nodeOutputData.blockId,
+        })
+    }
+
+    if (nodeInputName === 'print') {
+        const blockId =
+            nodeOutputData.blockId === null
+                ? nodeOutput.id
+                : nodeOutputData.blockId
+
+        if (nodeOutputName === 'assign') {
+            editor.updateNodeDataFromId(input_id, {
+                ...nodeInputData,
+                code: `print('${nodeInputData.data}' % ${nodeOutputData.name} )`,
+                blockId,
+                isTrue: nodeOutputData.isTrue,
+            })
+        } else {
+            editor.updateNodeDataFromId(input_id, {
+                ...nodeInputData,
+                code: `print('${nodeInputData.data}')`,
+                blockId,
+                isTrue: nodeOutputData.isTrue,
+            })
+        }
+    }
+
+    if (nodeInputName === 'if') {
+        const nodeInput1Id = nodeInput.inputs.input_1.connections[0]
+        const nodeInput2Id = nodeInput.inputs.input_2.connections[0]
+
+        if (nodeInput1Id && nodeInput2Id) {
+            const nodeInput1 = editor.getNodeFromId(nodeInput1Id.node)
+            const nodeInput2 = editor.getNodeFromId(nodeInput2Id.node)
+
+            const val1 =
+                nodeInput1.name !== 'string'
+                    ? nodeInput1.data.value
+                    : `'${nodeInput1.data.value}'`
+
+            const val2 =
+                nodeInput2.name !== 'string'
+                    ? nodeInput2.data.value
+                    : `'${nodeInput2.data.value}'`
+
+            const condition = `${val1} ${nodeInput.data.operator} ${val2}`
+
+            editor.updateNodeDataFromId(input_id, {
+                ...nodeInputData,
+                condition,
+                code: `if ${condition}:`,
+                blockId: nodeOutput.data.blockId,
+            })
+        }
+    }
+
+    if (
+        nodeInputName === 'sum' ||
+        nodeInputName === 'subtract' ||
+        nodeInputName === 'multiply' ||
+        nodeInputName === 'divide'
+    ) {
+        mathOperation(editor, nodeInput, nodeInputName)
+    }
+
     if (nodeInputName === 'for') {
         const blockId =
             nodeOutputData.blockId === null
@@ -113,63 +185,6 @@ export const actionHandler = (input_id, nodeOutput, nodeInput, editor) => {
             blockId,
             isTrue: nodeOutputData.isTrue,
         })
-    }
-
-    if (nodeOutput.name === 'for') {
-        editor.updateNodeDataFromId(input_id, {
-            ...nodeInputData,
-            isTrue: nodeOutputData.isTrue,
-            blockId: nodeOutput.id,
-        })
-    }
-
-    // Update value of the input node.
-    if (nodeInputName == 'assign') {
-        if (nodeOutput.name === 'string') {
-            editor.updateNodeDataFromId(input_id, {
-                name: String(nodeInputData.name),
-                value: nodeOutputData.value,
-                code: `${String(nodeInputData.name)} = '${
-                    nodeOutputData.value
-                }'`,
-                blockId: nodeOutputData.blockId,
-                isTrue: nodeOutputData.isTrue,
-            })
-        }
-        if (nodeOutput.name === 'bool') {
-            editor.updateNodeDataFromId(input_id, {
-                name: String(nodeInputData.name),
-                value: nodeOutputData.value,
-                code: `${String(nodeInputData.name)} = ${nodeOutputData.value}`,
-                blockId: nodeOutputData.blockId,
-                isTrue: nodeOutputData.isTrue,
-            })
-        }
-
-        if (nodeOutput.name === 'number') {
-            editor.updateNodeDataFromId(input_id, {
-                name: String(nodeInputData.name),
-                value: nodeOutputData.value,
-                code: `${String(nodeInputData.name)} = ${nodeOutputData.value}`,
-                blockId: nodeOutputData.blockId,
-                isTrue: nodeOutputData.isTrue,
-            })
-        }
-
-        if (
-            nodeOutput.name === 'sum' ||
-            nodeOutput.name === 'subtract' ||
-            nodeOutput.name === 'multiply' ||
-            nodeOutput.name === 'divide'
-        ) {
-            editor.updateNodeDataFromId(input_id, {
-                name: String(nodeInputData.name),
-                value: nodeOutputData.value,
-                code: `${String(nodeInputData.name)} = ${nodeOutputData.code}`,
-                blockId: nodeOutputData.blockId,
-                isTrue: nodeOutputData.isTrue,
-            })
-        }
     }
 }
 
